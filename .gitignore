@@ -1,0 +1,30 @@
+# Audio and Media outputs
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.opus
+*.flac
+
+# Intermediate & Temp Files
+shortcast_*/
+tmp_*/
+subs_*/
+*.vtt
+*.srt
+*.log
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.env
+venv/
+.venv/
+env/
+
+# IDE & Editor folders
+.vscode/
+.idea/
+*.swp

@@ -1,0 +1,95 @@
+{
+  "video_id": "hBvInWQWpZ0",
+  "title": "If UPI Is Free, Who Pays for It? | PhonePe, Razorpay & NPCI | WTF is Payments?",
+  "url": "https://www.youtube.com/watch?v=hBvInWQWpZ0",
+  "segments": [
+    {
+      "id": 1,
+      "title": "History of Money & Panel Introductions",
+      "start_time": "00:00:05",
+      "end_time": "00:01:52",
+      "include_in_tight_cut": true,
+      "narrator_bridge": "Welcome to WTF is Payments. Nikhil Kamath sits down with the architects of India's digital payment revolution: Sohini Rajola of NPCI, Harshil Mathur of Razorpay, and Sameer Nigam of PhonePe."
+    },
+    {
+      "id": 2,
+      "title": "Inside NPCI: Section 8 Structure, Surplus & Enforcement Power",
+      "start_time": "00:03:59",
+      "end_time": "00:09:15",
+      "include_in_tight_cut": true,
+      "narrator_bridge": "To understand UPI, we start with NPCI. Sohini Rajola explains its non-profit Section 8 structure and why banks originally resisted building it."
+    },
+    {
+      "id": 3,
+      "title": "Why Indian Payments Banks Failed While Small Finance Banks Survived",
+      "start_time": "00:09:40",
+      "end_time": "00:13:35",
+      "include_in_tight_cut": false,
+      "narrator_bridge": "The panel turns to payment banks, examining why restricting credit lending doomed the original model."
+    },
+    {
+      "id": 4,
+      "title": "Flipkart's Big Billion Day Meltdown & The Birth of PhonePe",
+      "start_time": "00:43:20",
+      "end_time": "00:46:45",
+      "include_in_tight_cut": false,
+      "narrator_bridge": "Sameer Nigam recounts the early infrastructure crisis at Flipkart that led to the creation of PhonePe."
+    },
+    {
+      "id": 5,
+      "title": "Anatomy of a 100-Rupee UPI Transfer & Who Actually Pays for It",
+      "start_time": "00:52:02",
+      "end_time": "01:05:25",
+      "include_in_tight_cut": true,
+      "narrator_bridge": "Now to the core question: when you send 100 rupees over UPI, who actually pays the server costs? The panel breaks down the exact unit economics."
+    },
+    {
+      "id": 6,
+      "title": "The Zero-MDR Debate & The 30% UPI Market-Share Cap",
+      "start_time": "01:17:11",
+      "end_time": "01:27:45",
+      "include_in_tight_cut": true,
+      "narrator_bridge": "Next, the controversial Zero-MDR mandate and the regulatory headache over PhonePe and Google Pay's combined 85 percent market dominance."
+    },
+    {
+      "id": 7,
+      "title": "Credit Card MDR Splits, RuPay on UPI & Razorpay's 10-Bps Margin",
+      "start_time": "01:41:18",
+      "end_time": "01:57:30",
+      "include_in_tight_cut": true,
+      "narrator_bridge": "Harshil Mathur unpacks credit card interchange, Razorpay's paper-thin 10-basis-point margin, and how RuPay on UPI changes merchant economics."
+    },
+    {
+      "id": 8,
+      "title": "What Payment Data Reveals About India & Solving Cash-on-Delivery Trust",
+      "start_time": "02:16:01",
+      "end_time": "02:24:30",
+      "include_in_tight_cut": false,
+      "narrator_bridge": "Looking at macro transaction trends, the founders discuss consumer behavior and how digital trust finally displaced Cash on Delivery."
+    },
+    {
+      "id": 9,
+      "title": "B2B Payments, Stablecoins vs. RBI CBDCs & Agentic Commerce",
+      "start_time": "02:42:20",
+      "end_time": "02:55:45",
+      "include_in_tight_cut": false,
+      "narrator_bridge": "Moving to future horizons: the reality of B2B invoicing friction, stablecoin settlements versus central bank digital currencies, and AI agents transacting."
+    },
+    {
+      "id": 10,
+      "title": "Emerging Builders: Wearable Rings, Merchant of Record & Cross-Border PSR",
+      "start_time": "03:24:31",
+      "end_time": "03:33:30",
+      "include_in_tight_cut": false,
+      "narrator_bridge": "Four emerging fintech founders join the table to demo smart payment rings, merchant-of-record rails, and cross-border settlement."
+    },
+    {
+      "id": 11,
+      "title": "Rogue AI Agents, 99.99% AI-Written Code & Final Advice for Founders",
+      "start_time": "03:56:01",
+      "end_time": "04:00:00",
+      "include_in_tight_cut": true,
+      "narrator_bridge": "To close, Nikhil and the panel debate the risks of autonomous AI agents executing financial transactions and share hard-earned advice for founders."
+    }
+  ]
+}
