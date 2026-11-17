@@ -196,17 +196,18 @@ def generate_edl_with_gemini(transcript: str, video_title: str, video_id: str, u
     client = genai.Client(api_key=api_key)
 
     prompt = f"""
-You are an expert executive audio producer and documentary editor.
+You are an expert audio editor and documentary producer.
 Your task is to take a full transcript of a long-form YouTube podcast and construct an Edit Decision List (EDL) in JSON format.
 
-The goal is to produce a high-signal documentary audio cut that:
-1. Retains all core insights, first-principles explanations, technical specifics, and authentic guest stories.
-2. Aggressively prunes banter, small talk, sponsor plugs, intro music, long-winded setup tangents, and repetitive arguments.
-3. Groups discussions into coherent chapters/segments with accurate start and end timestamps.
-4. Marks segments for two profiles:
-   - "include_in_tight_cut": true for essential, high-density segments (totaling ~40-60 minutes).
-   - "include_in_tight_cut": false for deep-dive or bonus discussions suitable for the full cut (totaling ~70-90 minutes).
-5. Writes a concise, natural AI narrator transition bridge (8-10 seconds of spoken audio, ~20-30 words) for each segment. The bridge must orient the listener to the topic starting right after skipped discussions.
+The goal is to produce a high-signal, 100% authentic human-audio cut:
+1. Retains 100% original human voices directly from the podcast. ZERO AI commentary or synthetic narrator voiceovers.
+2. Identifies and includes the podcast's own authentic introduction/hook directly from the host as Segment 1.
+3. Retains all core insights, first-principles explanations, technical specifics, and authentic guest stories.
+4. Aggressively prunes banter, small talk, sponsor plugs, intro music loops, long-winded setup tangents, and repetitive arguments.
+5. Groups discussions into coherent chapters/segments with accurate start and end timestamps that flow naturally when played back-to-back.
+6. Marks segments for two profiles:
+   - "include_in_tight_cut": true for essential, high-density segments (totaling ~35-50 minutes).
+   - "include_in_tight_cut": false for deep-dive or bonus discussions suitable for the full cut (totaling ~60-80 minutes).
 
 Podcast Title: {video_title}
 Video URL: {url}
@@ -222,11 +223,10 @@ Respond ONLY with valid JSON conforming to this schema:
   "segments": [
     {{
       "id": 1,
-      "title": "Segment Title",
+      "title": "Segment Title (e.g. Host Introduction & Guest Welcome)",
       "start_time": "HH:MM:SS",
       "end_time": "HH:MM:SS",
-      "include_in_tight_cut": true,
-      "narrator_bridge": "Short 1-2 sentence narrator setup."
+      "include_in_tight_cut": true
     }}
   ]
 }}
@@ -386,11 +386,11 @@ def download_audio_section(
         raise RuntimeError(f"Failed to slice audio section {section_arg}: {res.stderr}")
 
 
-def print_dry_run_summary(segments: List[Dict[str, Any]], profile: str):
+def print_dry_run_summary(segments: List[Dict[str, Any]], profile: str, enable_bridges: bool = False):
     """Displays estimated time metrics for the selected cut profile."""
     total_raw_sec = 0.0
     print("\n" + "=" * 78)
-    print(f" DRY RUN SUMMARY: Profile [{profile.upper()}] ({len(segments)} segments)")
+    print(f" DRY RUN SUMMARY: Profile [{profile.upper()}] ({len(segments)} segments) - 0 AI Commentary")
     print("=" * 78)
     print(f"{'#':<3} {'Start':<9} {'End':<9} {'Duration':<10} {'Title'}")
     print("-" * 78)
@@ -403,20 +403,27 @@ def print_dry_run_summary(segments: List[Dict[str, Any]], profile: str):
         print(f"{i:<3} {seg['start_time']:<9} {seg['end_time']:<9} {format_seconds(dur):<10} {seg.get('title', 'Segment')}")
 
     est_trimmed_sec = total_raw_sec * 0.76  # ~24% average reduction from dead-air stripping
-    est_bridges_sec = len(segments) * 9.5   # ~9.5s average per bridge
-    final_est_sec = est_trimmed_sec + est_bridges_sec
+    if enable_bridges:
+        est_bridges_sec = len(segments) * 9.5
+        final_est_sec = est_trimmed_sec + est_bridges_sec
+    else:
+        est_bridges_sec = 0.0
+        final_est_sec = est_trimmed_sec
 
     print("-" * 78)
     print(f"Raw Segment Audio Total : {format_seconds(total_raw_sec)}")
     print(f"Est. After Pause-Removal : ~{format_seconds(est_trimmed_sec)} (at -35dB / 0.45s threshold)")
-    print(f"Est. AI Narrator Bridges : ~{format_seconds(est_bridges_sec)} ({len(segments)} bridges)")
+    if enable_bridges:
+        print(f"Est. AI Narrator Bridges : ~{format_seconds(est_bridges_sec)} ({len(segments)} bridges)")
+    else:
+        print("AI Commentary / Bridges  : None (0 AI commentary - 100% authentic podcast voices)")
     print(f"Estimated Final Duration : ~{format_seconds(final_est_sec)}")
     print("=" * 78 + "\n")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Convert long YouTube podcasts into tight, listenable documentary MP3s."
+        description="Convert long YouTube podcasts into tight, listenable MP3s using 100% authentic voices."
     )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--url", help="YouTube video URL to process end-to-end")
@@ -427,10 +434,10 @@ def main():
     parser.add_argument("--output", help="Output MP3 filename")
     parser.add_argument("--keep-pauses", action="store_true",
                         help="Skip FFmpeg silence removal (preserves all natural dead air)")
-    parser.add_argument("--skip-bridges", action="store_true",
-                        help="Skip synthesizing AI narrator transitions between segments")
+    parser.add_argument("--ai-bridges", action="store_true", default=False,
+                        help="Opt-in to synthesize AI narrator transitions (default: False, 0 AI commentary)")
     parser.add_argument("--voice", default="en-IN-PrabhatNeural",
-                        help="Narrator voice name (e.g. 'Puck' for Gemini TTS, or edge-tts voice)")
+                        help="Narrator voice name if --ai-bridges is enabled (default: 'en-IN-PrabhatNeural')")
     parser.add_argument("--silence-threshold", type=float, default=-35.0,
                         help="Silence detection threshold in dB (default: -35.0)")
     parser.add_argument("--silence-duration", type=float, default=0.45,
@@ -486,7 +493,7 @@ def main():
             print("[!] No segments found matching the selected profile.")
             sys.exit(1)
 
-        print_dry_run_summary(selected_segments, args.profile)
+        print_dry_run_summary(selected_segments, args.profile, enable_bridges=args.ai_bridges)
         if args.dry_run:
             print("[*] Dry run complete. No audio downloaded.")
             return
@@ -510,6 +517,8 @@ def main():
         concat_entries = []
 
         print(f"\n[*] Processing {len(selected_segments)} segments into final MP3: {final_output.name}")
+        if not args.ai_bridges:
+            print("[*] Mode: 0 AI Commentary (100% authentic podcast voices only)")
 
         for idx, seg in enumerate(selected_segments, 1):
             seg_id = seg.get("id", idx)
@@ -520,8 +529,8 @@ def main():
 
             print(f"\n--- [{idx}/{len(selected_segments)}] {title} ({s_time} - {e_time}) ---")
 
-            # 1. Narrator bridge
-            if bridge_text and not args.skip_bridges:
+            # 1. Narrator bridge (disabled by default; opt-in with --ai-bridges)
+            if args.ai_bridges and bridge_text:
                 raw_bridge = work_dir / f"bridge_{idx}_raw.mp3"
                 clean_bridge = work_dir / f"bridge_{idx}_clean.wav"
                 print(f"    [*] Synthesizing bridge: \"{bridge_text[:60]}...\"")
