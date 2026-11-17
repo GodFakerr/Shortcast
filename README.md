@@ -1,15 +1,23 @@
+<div align="center">
+
 # Shortcast 🎙️✂️
 
-> **Turn 4-hour YouTube podcasts into concise, broadcast-grade MP3s using 100% authentic human voices. Zero AI commentary.**
+<p align="center">
+  <strong>Turn 4-hour YouTube podcasts into concise, broadcast-grade MP3s using 100% authentic human voices. Zero AI commentary.</strong>
+</p>
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python)](https://python.org)
-[![FFmpeg](https://img.shields.io/badge/FFmpeg-9.0%2B-green?style=flat-square&logo=ffmpeg)](https://ffmpeg.org)
-[![yt-dlp](https://img.shields.io/badge/yt--dlp-2026%2B-red?style=flat-square)](https://github.com/yt-dlp/yt-dlp)
-[![Gemini](https://img.shields.io/badge/Google-Gemini%202.5%20Flash-orange?style=flat-square&logo=google)](https://deepmind.google/technologies/gemini/)
+<p align="center">
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python" alt="Python" /></a>
+  <a href="https://ffmpeg.org"><img src="https://img.shields.io/badge/FFmpeg-9.0%2B-green?style=flat-square&logo=ffmpeg" alt="FFmpeg" /></a>
+  <a href="https://github.com/yt-dlp/yt-dlp"><img src="https://img.shields.io/badge/yt--dlp-2026%2B-red?style=flat-square" alt="yt-dlp" /></a>
+  <a href="https://deepmind.google/technologies/gemini/"><img src="https://img.shields.io/badge/Google-Gemini%202.5%20Flash-orange?style=flat-square&logo=google" alt="Gemini" /></a>
+</p>
+
+</div>
 
 ---
 
-## The Problem
+<h2 align="center">The Problem</h2>
 
 Long-form podcasts (2 to 5 hours) are packed with deep, high-signal masterclasses, but also loaded with:
 * 30-minute opening sponsor plugs and irrelevant filler.
@@ -23,7 +31,7 @@ Long-form podcasts (2 to 5 hours) are packed with deep, high-signal masterclasse
 
 ---
 
-## The Shortcast Solution: Pure Authentic Audio Clipping
+<h2 align="center">The Shortcast Solution: Pure Authentic Audio Clipping</h2>
 
 Shortcast extracts, polishes, and concatenates only the most valuable segments using the podcast's original studio audio:
 
@@ -35,27 +43,27 @@ Shortcast extracts, polishes, and concatenates only the most valuable segments u
 
 ---
 
-## Architecture
+<h2 align="center">Architecture</h2>
 
 ```mermaid
 flowchart TD
-    A[YouTube URL] -->|yt-dlp --skip-download --write-auto-sub| B[VTT Subtitle Track]
-    B -->|Deduplicate & Parse| C[Timestamped Transcript]
-    C -->|Gemini 2.5 Flash| D[Edit Decision List EDL JSON]
-    D -->|Segment 1: Host Intro & Keeper Timestamps| E[Targeted Stream Slicer]
-    
-    subgraph Audio Processing Pipeline
-        E -->|yt-dlp --download-sections| F[Raw Audio Slices]
-        F -->|FFmpeg silenceremove| G[Pause-Trimmed Audio]
-        G -->|FFmpeg loudnorm -16 LUFS| H[Normalized Clips]
+    A["YouTube URL"] -->|yt-dlp --skip-download| B["VTT Subtitle Track"]
+    B -->|Deduplicate & Parse| C["Timestamped Transcript"]
+    C -->|Gemini 2.5 Flash| D["Edit Decision List EDL JSON"]
+    D -->|Segment Timestamps| E["Targeted Stream Slicer"]
+
+    subgraph Pipeline ["Audio Processing Pipeline"]
+        E -->|yt-dlp --download-sections| F["Raw Audio Slices"]
+        F -->|FFmpeg silenceremove| G["Pause-Trimmed Audio"]
+        G -->|FFmpeg loudnorm -16 LUFS| H["Normalized Audio Clips"]
     end
-    
-    H -->|FFmpeg Concat Demuxer| I[Broadcast-Ready Master MP3 (100% Real Voices)]
+
+    H -->|FFmpeg Concat Demuxer| I["Broadcast-Ready Master MP3 (100% Real Voices)"]
 ```
 
 ---
 
-## Benchmark Case Study
+<h2 align="center">Benchmark Case Study</h2>
 
 Tested on Nikhil Kamath's **WTF is Payments?** episode with PhonePe, Razorpay & NPCI:
 
@@ -70,7 +78,7 @@ Tested on Nikhil Kamath's **WTF is Payments?** episode with PhonePe, Razorpay & 
 
 ---
 
-## Installation & Prerequisites
+<h2 align="center">Installation & Prerequisites</h2>
 
 ### 1. Prerequisites
 * **Python**: 3.10 or higher
@@ -88,7 +96,7 @@ pip install yt-dlp google-genai
 
 ---
 
-## Usage
+<h2 align="center">Usage</h2>
 
 ### Mode 1: Fully Automated from YouTube URL
 Analyzes the subtitle track using Gemini 2.5 Flash, selects the host's natural intro and high-signal chapters, creates the EDL JSON, and renders the pure audio MP3:
@@ -114,14 +122,14 @@ python podcast_splicer.py --edl upi_podcast_edl.json --profile tight --output "U
 
 ---
 
-## Cut Profiles
+<h2 align="center">Cut Profiles</h2>
 
 * **tight** (Default): Extracts only the essential, highest-signal chapters (typically ~40–50 mins). Perfect for high-density learning.
 * **full**: Includes secondary founder discussions, technical deep dives, and macro trends (typically ~60–80 mins).
 
 ---
 
-## CLI Options & Flags
+<h2 align="center">CLI Options & Flags</h2>
 
 | Flag | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
@@ -137,7 +145,7 @@ python podcast_splicer.py --edl upi_podcast_edl.json --profile tight --output "U
 
 ---
 
-## EDL JSON Format
+<h2 align="center">EDL JSON Format</h2>
 
 You can inspect or customize any generated EDL:
 
@@ -167,6 +175,6 @@ You can inspect or customize any generated EDL:
 
 ---
 
-## License
+<h2 align="center">License</h2>
 
 MIT License. Built for high-signal learning and pure audio preservation.
